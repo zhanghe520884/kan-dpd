@@ -278,6 +278,17 @@ python scripts/summary_table.py        # results/SUMMARY.{md, csv}
 python scripts/make_figures.py         # results/figures/F1..F6
 ```
 
+### 关于运行耗时的说明
+
+不同阶段的耗时差异较大,原因如下,均属正常现象:
+
+- **e3 的 GMP K/Q 扫描较慢**: checkpoint 复用机制只对神经网络(KAN/MLP/CNN/GRU)有效。GMP 是最小二乘闭解模型,不走神经网络的训练循环,也没有"加载权重跳过"机制;每组 (K, Q) 都要重新构造特征矩阵并求解最小二乘(共 3×3×2 = 18 次),高阶时特征维度大、样本多,因此现算耗时较长。这不是 bug,而是解析模型本身每换一组阶数/记忆深度都必须重解方程。
+
+- **e5 的 DPA_160MHz 较慢**: 该数据集有约 49 万样本,是 DPA_200MHz(约 3.8 万)的 12.8 倍。即使模型权重已缓存(`checkpoints/sim_to_meas/` 下已存全部 .pt,训练会被跳过),e5 每次仍需在全部样本上重做"代理 PA 前向的 GMP 最小二乘拟合
+  + 模型推理 + PSD/ACPR 计算",这些非训练开销随样本量线性放大,故大数据集显著更慢。其中 B_zero_shot 为纯推理(快),A_scratch 与 C_finetune 涉及真训练(首次运行需完整训练,二次运行命中 ckpt 后跳过训练)。
+
+- **二次运行普遍很快**: 神经网络权重命中 checkpoint 后跳过训练,通常 1–2 分钟即可刷新全部图表。若有 GPU,`config.DEVICE` 会自动启用,大数据集训练显著加速。
+
 ---
 
 ## 5. 单独运行某个阶段
