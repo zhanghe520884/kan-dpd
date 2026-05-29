@@ -1,0 +1,15 @@
+
+=== Experiment 5: Sim → Measured transfer  (measured = "DPA_200MHz.npz") ===
+  measured size: 38400 samples
+  OpenDPD 官方分割: train_end=23040  val_end=30720
+  seed = 2026
+D:\000-MyFile_in_University\硕士\课程相关\高级机器学习理论\knn\knn_code\trainer.py:58: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model.load_state_dict(torch.load(ckpt_path, map_location=device))
+  seed = 7
+  seed = 19
+  -- summary (mean ± std over 3 seeds) --
+    strategy                         NMSE_dB       EVM_%    ACPR_L
+    A_scratch                  16.40±2.79  682.53±206.59   -3.33
+    B_zero_shot                 1.74±0.00  122.16±0.04   -7.87
+    C_finetune_5pct            -4.78±0.06   57.67±0.40   -8.09
+    C_finetune_20pct           -8.83±0.20   36.20±0.84   -7.21

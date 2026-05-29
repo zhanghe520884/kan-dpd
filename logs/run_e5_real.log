@@ -1,0 +1,13 @@
+
+=== Experiment 5: Sim ¡ú Measured transfer  (measured = "DPA_200MHz.npz") ===
+  measured size: 38400 samples
+  OpenDPD ¹Ù·½·Ö¸î: train_end=23040  val_end=30720
+  seed = 2026
+  seed = 7
+  seed = 19
+  -- summary (mean ¡À std over 3 seeds) --
+    strategy                         NMSE_dB       EVM_%    ACPR_L
+    A_scratch                  16.40¡À2.79  682.53¡À206.59   -3.33
+    B_zero_shot                 1.74¡À0.00  122.16¡À0.04   -7.87
+    C_finetune_5pct            -4.78¡À0.06   57.67¡À0.40   -8.09
+    C_finetune_20pct           -8.83¡À0.20   36.20¡À0.84   -7.21

@@ -1,0 +1,30 @@
+
+=== Experiment 2: DPD (ILA) on "saleh"  (5 seeds) ===
+    seed=2026  alpha=2.1582+0.0016j
+    seed=7  alpha=2.1583+0.0015j
+    seed=19  alpha=2.1582+0.0016j
+    seed=73  alpha=2.1583+0.0015j
+    seed=101  alpha=2.1582+0.0016j
+  -- summary (mean ¡À std over 5 seeds) --
+    NoDPD       NMSE= -15.36¡À0.15 dB  EVM=17.06¡À0.30 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö     0  
+    GMP         NMSE= -39.37¡À5.11 dB  EVM= 1.20¡À0.52 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö   168  
+    MLP         NMSE= -24.47¡À0.55 dB  EVM= 5.99¡À0.37 %  ACPR(L/U)=-8.9/-9.1 dB  params¡Ö  1602  
+    CNN         NMSE= -23.70¡À0.41 dB  EVM= 6.54¡À0.31 %  ACPR(L/U)=-8.8/-9.0 dB  params¡Ö   938  
+    GRU         NMSE= -25.40¡À0.63 dB  EVM= 5.38¡À0.40 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  2146  
+    KAN         NMSE= -35.85¡À2.14 dB  EVM= 1.65¡À0.36 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  3072  
+    GMP+KAN     NMSE= -39.36¡À5.08 dB  EVM= 1.20¡À0.52 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  3072  
+
+=== Experiment 2: DPD (ILA) on "rapp"  (5 seeds) ===
+    seed=2026  alpha=1.0000+0.0000j
+    seed=7  alpha=1.0000-0.0000j
+    seed=19  alpha=1.0000+0.0000j
+    seed=73  alpha=1.0000-0.0000j
+    seed=101  alpha=1.0000-0.0000j
+  -- summary (mean ¡À std over 5 seeds) --
+    NoDPD       NMSE= -59.95¡À1.90 dB  EVM= 0.10¡À0.02 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö     0  
+    GMP         NMSE= -98.43¡À4.70 dB  EVM= 0.00¡À0.00 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö   168  
+    MLP         NMSE= -46.27¡À0.67 dB  EVM= 0.49¡À0.04 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  1602  
+    CNN         NMSE= -35.38¡À0.77 dB  EVM= 1.71¡À0.15 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö   938  
+    GRU         NMSE= -49.98¡À2.23 dB  EVM= 0.33¡À0.08 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  2146  
+    KAN         NMSE= -51.00¡À1.86 dB  EVM= 0.29¡À0.07 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  3072  
+    GMP+KAN     NMSE= -67.78¡À1.79 dB  EVM= 0.04¡À0.01 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  3072  

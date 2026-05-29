@@ -1,0 +1,129 @@
+
+=== Experiment 1: PA forward modeling on "saleh"  (5 seeds) ===
+  seed=2026
+  seed=7
+  seed=19
+  seed=73
+  seed=101
+  -- summary (NMSE_dB, mean ¡À std over 5 seeds) --
+    MP          NMSE= -81.84 ¡À 3.93 dB   params¡Ö    70
+    GMP         NMSE= -64.46 ¡À 3.50 dB   params¡Ö   168   p=0.0625 
+    MLP         NMSE= -32.51 ¡À 1.25 dB   params¡Ö  1602   p=0.0625 
+    CNN         NMSE= -26.18 ¡À 0.52 dB   params¡Ö   938   p=0.0625 
+    GRU         NMSE= -28.73 ¡À 0.62 dB   params¡Ö  2146   p=0.0625 
+    KAN         NMSE= -44.09 ¡À 0.71 dB   params¡Ö  3072   p=0.0625 
+    GMP+KAN     NMSE= -63.60 ¡À 3.00 dB   params¡Ö  3072   p=0.0625 
+
+=== Experiment 1: PA forward modeling on "rapp"  (5 seeds) ===
+  seed=2026
+  seed=7
+  seed=19
+  seed=73
+  seed=101
+  -- summary (NMSE_dB, mean ¡À std over 5 seeds) --
+    MP          NMSE=-128.53 ¡À 4.45 dB   params¡Ö    70
+    GMP         NMSE=-109.09 ¡À 1.83 dB   params¡Ö   168   p=0.0625 
+    MLP         NMSE= -48.05 ¡À 0.99 dB   params¡Ö  1602   p=0.0625 
+    CNN         NMSE= -35.64 ¡À 0.78 dB   params¡Ö   938   p=0.0625 
+    GRU         NMSE= -52.16 ¡À 3.22 dB   params¡Ö  2146   p=0.0625 
+    KAN         NMSE= -51.23 ¡À 1.91 dB   params¡Ö  3072   p=0.0625 
+    GMP+KAN     NMSE= -67.78 ¡À 1.79 dB   params¡Ö  3072   p=0.0625 
+
+=== Experiment 1: PA forward modeling on "gmp_pa"  (5 seeds) ===
+  seed=2026
+  seed=7
+  seed=19
+  seed=73
+  seed=101
+  -- summary (NMSE_dB, mean ¡À std over 5 seeds) --
+    MP          NMSE= -39.89 ¡À 0.46 dB   params¡Ö    70
+    GMP         NMSE= -69.25 ¡À 4.08 dB   params¡Ö   168   p=0.0625 
+    MLP         NMSE= -29.19 ¡À 1.51 dB   params¡Ö  1602   p=0.0625 
+    CNN         NMSE= -25.79 ¡À 0.71 dB   params¡Ö   938   p=0.0625 
+    GRU         NMSE= -31.77 ¡À 1.70 dB   params¡Ö  2146   p=0.0625 
+    KAN         NMSE= -38.78 ¡À 1.81 dB   params¡Ö  3072   p=0.312 
+    GMP+KAN     NMSE= -63.05 ¡À 3.96 dB   params¡Ö  3072   p=0.0625 
+
+=== Experiment 2: DPD (ILA) on "saleh"  (5 seeds) ===
+    seed=2026  alpha=2.1582+0.0016j
+    seed=7  alpha=2.1583+0.0015j
+    seed=19  alpha=2.1582+0.0016j
+    seed=73  alpha=2.1583+0.0015j
+    seed=101  alpha=2.1582+0.0016j
+  -- summary (mean ¡À std over 5 seeds) --
+    NoDPD       NMSE= -15.36¡À0.15 dB  EVM=17.06¡À0.30 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö     0  
+    GMP         NMSE= -39.37¡À5.11 dB  EVM= 1.20¡À0.52 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö   168  
+    MLP         NMSE= -24.47¡À0.55 dB  EVM= 5.99¡À0.37 %  ACPR(L/U)=-8.9/-9.1 dB  params¡Ö  1602  
+    CNN         NMSE= -23.70¡À0.41 dB  EVM= 6.54¡À0.31 %  ACPR(L/U)=-8.8/-9.0 dB  params¡Ö   938  
+    GRU         NMSE= -25.40¡À0.63 dB  EVM= 5.38¡À0.40 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  2146  
+    KAN         NMSE= -35.85¡À2.14 dB  EVM= 1.65¡À0.36 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  3072  
+    GMP+KAN     NMSE= -39.36¡À5.08 dB  EVM= 1.20¡À0.52 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  3072  
+
+=== Experiment 2: DPD (ILA) on "rapp"  (5 seeds) ===
+    seed=2026  alpha=1.0000+0.0000j
+    seed=7  alpha=1.0000-0.0000j
+    seed=19  alpha=1.0000+0.0000j
+    seed=73  alpha=1.0000-0.0000j
+    seed=101  alpha=1.0000-0.0000j
+  -- summary (mean ¡À std over 5 seeds) --
+    NoDPD       NMSE= -59.95¡À1.90 dB  EVM= 0.10¡À0.02 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö     0  
+    GMP         NMSE= -98.43¡À4.70 dB  EVM= 0.00¡À0.00 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö   168  
+    MLP         NMSE= -46.27¡À0.67 dB  EVM= 0.49¡À0.04 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  1602  
+    CNN         NMSE= -35.38¡À0.77 dB  EVM= 1.71¡À0.15 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö   938  
+    GRU         NMSE= -49.98¡À2.23 dB  EVM= 0.33¡À0.08 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  2146  
+    KAN         NMSE= -51.00¡À1.86 dB  EVM= 0.29¡À0.07 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  3072  
+    GMP+KAN     NMSE= -67.78¡À1.79 dB  EVM= 0.04¡À0.01 %  ACPR(L/U)=-8.9/-9.0 dB  params¡Ö  3072  
+
+=== Experiment 2: DPD (ILA) on "gmp_pa"  (5 seeds) ===
+    seed=2026  alpha=0.3984+0.2975j
+    seed=7  alpha=0.8135+0.5151j
+    seed=19  alpha=0.1702+0.0676j
+    seed=73  alpha=0.4476+0.3881j
+    seed=101  alpha=0.5898-0.0324j
+  -- summary (mean ¡À std over 5 seeds) --
+    NoDPD       NMSE=   2.22¡À6.09 dB  EVM=162.21¡À139.74 %  ACPR(L/U)=-9.2/-7.6 dB  params¡Ö     0  
+    GMP         NMSE=  51.26¡À48.96 dB  EVM=10236056.87¡À19879207.26 %  ACPR(L/U)=-2.6/-5.5 dB  params¡Ö   168  
+    MLP         NMSE=  23.80¡À21.67 dB  EVM=10258.07¡À15314.91 %  ACPR(L/U)=-3.7/-6.2 dB  params¡Ö  1602  
+    CNN         NMSE=   3.76¡À2.33 dB  EVM=158.48¡À41.10 %  ACPR(L/U)=-4.3/-4.8 dB  params¡Ö   938  
+    GRU         NMSE=  21.05¡À19.98 dB  EVM=5131.67¡À7043.90 %  ACPR(L/U)=-3.4/-6.3 dB  params¡Ö  2146  
+    KAN         NMSE=  16.15¡À13.73 dB  EVM=1564.27¡À1888.93 %  ACPR(L/U)=-3.9/-6.1 dB  params¡Ö  3072  
+    GMP+KAN     NMSE=  51.82¡À45.16 dB  EVM=5231717.93¡À8622077.10 %  ACPR(L/U)=-2.6/-5.5 dB  params¡Ö  3072  
+
+[Ablation A] KAN spline grid size
+    grid=5  NMSE = 21.02 ¡À 22.48 dB
+    grid=7  NMSE = 20.30 ¡À 19.64 dB
+    grid=9  NMSE = 19.65 ¡À 17.28 dB
+
+[Ablation B] Time-delay tap count
+    tap=3  NMSE = 15.18 dB
+    tap=5  NMSE = 20.30 dB
+    tap=7  NMSE = 11.82 dB
+    tap=9  NMSE = 23.09 dB
+
+[Ablation C] Input feature variants
+    IQ_only            NMSE = 23.17 dB
+    IQ+env             NMSE = 23.99 dB
+    IQ+env+phase       NMSE = 20.30 dB
+
+[Ablation D] Pure KAN vs GMP+KAN residual
+    pure_KAN    NMSE = 20.30 dB
+    GMP+KAN     NMSE = 56.07 dB
+
+[Ablation E] KAN spline LUT-quantization
+    fp     NMSE = 20.30 ¡À 19.64 dB
+    q12    NMSE = 20.51 ¡À 19.91 dB
+    q10    NMSE = 19.26 ¡À 19.80 dB
+    q8     NMSE = 18.08 ¡À 21.67 dB
+    q6     NMSE = 22.46 ¡À 25.98 dB
+    q4     NMSE = 25.63 ¡À 32.19 dB
+
+[Sweep] GMP nonlinear order K and memory Q
+    K=5,Q=3     NMSE = 55.51 dB
+    K=5,Q=5     NMSE = 53.69 dB
+    K=5,Q=7     NMSE = 63.13 dB
+    K=7,Q=3     NMSE = 88.69 dB
+    K=7,Q=5     NMSE = 85.33 dB
+    K=7,Q=7     NMSE = 107.50 dB
+    K=9,Q=3     NMSE = 110.06 dB
+    K=9,Q=5     NMSE = 143.63 dB
+    K=9,Q=7     NMSE = 145.67 dB

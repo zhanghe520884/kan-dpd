@@ -1,0 +1,30 @@
+
+=== Experiment 1: PA forward modeling on "saleh"  (5 seeds) ===
+  seed=2026
+  seed=7
+  seed=19
+  seed=73
+  seed=101
+  -- summary (NMSE_dB, mean ¡À std over 5 seeds) --
+    MP          NMSE= -81.84 ¡À 3.93 dB   params¡Ö    70
+    GMP         NMSE= -64.46 ¡À 3.50 dB   params¡Ö   168   p=0.0625 
+    MLP         NMSE= -32.51 ¡À 1.25 dB   params¡Ö  1602   p=0.0625 
+    CNN         NMSE= -26.18 ¡À 0.52 dB   params¡Ö   938   p=0.0625 
+    GRU         NMSE= -28.73 ¡À 0.62 dB   params¡Ö  2146   p=0.0625 
+    KAN         NMSE= -44.09 ¡À 0.71 dB   params¡Ö  3072   p=0.0625 
+    GMP+KAN     NMSE= -63.60 ¡À 3.00 dB   params¡Ö  3072   p=0.0625 
+
+=== Experiment 1: PA forward modeling on "rapp"  (5 seeds) ===
+  seed=2026
+  seed=7
+  seed=19
+  seed=73
+  seed=101
+  -- summary (NMSE_dB, mean ¡À std over 5 seeds) --
+    MP          NMSE=-128.53 ¡À 4.45 dB   params¡Ö    70
+    GMP         NMSE=-109.09 ¡À 1.83 dB   params¡Ö   168   p=0.0625 
+    MLP         NMSE= -48.05 ¡À 0.99 dB   params¡Ö  1602   p=0.0625 
+    CNN         NMSE= -35.64 ¡À 0.78 dB   params¡Ö   938   p=0.0625 
+    GRU         NMSE= -52.16 ¡À 3.22 dB   params¡Ö  2146   p=0.0625 
+    KAN         NMSE= -51.23 ¡À 1.91 dB   params¡Ö  3072   p=0.0625 
+    GMP+KAN     NMSE= -67.78 ¡À 1.79 dB   params¡Ö  3072   p=0.0625 

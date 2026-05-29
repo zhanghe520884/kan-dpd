@@ -1,0 +1,19 @@
+# 仅忽略缓存与临时文件;训练权重(checkpoints/)、实测数据(*.npz)、
+# 全部结果与图件(results/, 含 TIFF)均纳入版本库,便于完整复现。
+
+# ---- Python 缓存 ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# ---- 虚拟环境 ----
+.venv/
+venv/
+env/
+
+# ---- 操作系统 / 编辑器 ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

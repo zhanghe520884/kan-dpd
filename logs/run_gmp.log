@@ -1,0 +1,69 @@
+
+=== Experiment 1: PA forward modeling on "gmp_pa"  (5 seeds) ===
+  seed=2026
+  seed=7
+  seed=19
+  seed=73
+  seed=101
+  -- summary (NMSE_dB, mean ¡À std over 5 seeds) --
+    MP          NMSE= -50.52 ¡À 0.45 dB   params¡Ö    70
+    GMP         NMSE=-101.13 ¡À 4.08 dB   params¡Ö   168   p=0.0625 
+    MLP         NMSE= -38.74 ¡À 0.61 dB   params¡Ö  1602   p=0.0625 
+    CNN         NMSE= -23.75 ¡À 3.05 dB   params¡Ö   938   p=0.0625 
+    GRU         NMSE= -34.99 ¡À 1.57 dB   params¡Ö  2146   p=0.0625 
+    KAN         NMSE= -44.89 ¡À 0.38 dB   params¡Ö  3072   p=0.0625 
+    GMP+KAN     NMSE= -76.11 ¡À 1.98 dB   params¡Ö  3072   p=0.0625 
+
+=== Experiment 2: DPD (ILA) on "gmp_pa"  (5 seeds) ===
+    seed=2026  alpha=1.0000+0.0000j
+    seed=7  alpha=1.0000+0.0000j
+    seed=19  alpha=1.0000+0.0000j
+    seed=73  alpha=1.0000+0.0000j
+    seed=101  alpha=1.0000+0.0000j
+  -- summary (mean ¡À std over 5 seeds) --
+    NoDPD       NMSE=  11.72¡À0.00 dB  EVM=385.65¡À0.15 %  ACPR(L/U)=-9.1/-7.8 dB  params¡Ö     0  
+    GMP         NMSE=  -9.96¡À1.06 dB  EVM=31.95¡À3.87 %  ACPR(L/U)=-6.1/-6.9 dB  params¡Ö   168  
+    MLP         NMSE= -11.20¡À1.20 dB  EVM=27.75¡À3.78 %  ACPR(L/U)=-6.2/-6.6 dB  params¡Ö  1602  
+    CNN         NMSE= -10.04¡À0.39 dB  EVM=31.49¡À1.41 %  ACPR(L/U)=-5.0/-4.9 dB  params¡Ö   938  
+    GRU         NMSE= -11.09¡À1.30 dB  EVM=28.15¡À4.12 %  ACPR(L/U)=-6.4/-6.8 dB  params¡Ö  2146  
+    KAN         NMSE= -11.09¡À1.21 dB  EVM=28.10¡À3.85 %  ACPR(L/U)=-6.2/-6.5 dB  params¡Ö  3072  
+    GMP+KAN     NMSE=  -9.90¡À1.05 dB  EVM=32.16¡À3.86 %  ACPR(L/U)=-6.3/-7.2 dB  params¡Ö  3072  
+
+[Ablation A] KAN spline grid size
+    grid=5  NMSE = -10.64 ¡À 1.27 dB
+    grid=7  NMSE = -10.58 ¡À 1.25 dB
+    grid=9  NMSE = -10.54 ¡À 1.28 dB
+
+[Ablation B] Time-delay tap count
+    tap=3  NMSE = -10.51 dB
+    tap=5  NMSE = -10.58 dB
+    tap=7  NMSE = -10.96 dB
+    tap=9  NMSE = -11.20 dB
+
+[Ablation C] Input feature variants
+    IQ_only            NMSE = -10.67 dB
+    IQ+env             NMSE = -10.66 dB
+    IQ+env+phase       NMSE = -10.58 dB
+
+[Ablation D] Pure KAN vs GMP+KAN residual
+    pure_KAN    NMSE = -10.58 dB
+    GMP+KAN     NMSE = -9.41 dB
+
+[Ablation E] KAN spline LUT-quantization
+    fp     NMSE = -10.58 ¡À 1.25 dB
+    q12    NMSE = -10.58 ¡À 1.25 dB
+    q10    NMSE = -10.57 ¡À 1.27 dB
+    q8     NMSE = -10.49 ¡À 1.16 dB
+    q6     NMSE = -9.29 ¡À 2.41 dB
+    q4     NMSE = -0.96 ¡À 0.38 dB
+
+[Sweep] GMP nonlinear order K and memory Q
+    K=5,Q=3     NMSE = -9.42 dB
+    K=5,Q=5     NMSE = -9.62 dB
+    K=5,Q=7     NMSE = -9.88 dB
+    K=7,Q=3     NMSE = -8.83 dB
+    K=7,Q=5     NMSE = -8.39 dB
+    K=7,Q=7     NMSE = -8.66 dB
+    K=9,Q=3     NMSE = -8.61 dB
+    K=9,Q=5     NMSE = -8.13 dB
+    K=9,Q=7     NMSE = -8.26 dB

@@ -1,0 +1,12 @@
+
+=== Experiment 5: Sim ¡ú Measured transfer  (measured = "__proxy__") ===
+  measured size: 60000 samples
+  seed = 2026
+  seed = 7
+  seed = 19
+  -- summary (mean ¡À std over 3 seeds) --
+    strategy                         NMSE_dB       EVM_%    ACPR_L
+    A_scratch                  25.93¡À6.85  2349.56¡À1378.05   -2.25
+    B_zero_shot                 3.59¡À0.10  151.26¡À1.67   -8.41
+    C_finetune_5pct             2.02¡À0.07  126.17¡À1.04   -7.07
+    C_finetune_20pct           -1.12¡À0.32   87.92¡À3.25   -5.64

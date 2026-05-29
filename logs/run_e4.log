@@ -1,0 +1,12 @@
+
+=== Experiment 4: Spectrum-aware KAN-DPD on "gmp_pa"  (3 seeds × 4 λ) ===
+D:\000-MyFile_in_University\硕士\课程相关\高级机器学习理论\knn\knn_code\trainer.py:58: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model.load_state_dict(torch.load(ckpt_path, map_location=device))
+D:\000-MyFile_in_University\硕士\课程相关\高级机器学习理论\knn\knn_code\trainer.py:58: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model.load_state_dict(torch.load(ckpt_path, map_location=device))
+  -- summary (mean ± std over 3 seeds) --
+    λ                NMSE_dB       EVM_%    ACPR_L    ACPR_U
+    λ=0        -8.41±5.18  42.94±26.70   -5.72     -5.92
+    λ=0.1      -5.16±0.11  55.21±0.72   -1.77     -1.76
+    λ=1         2.45±4.72  147.42±87.47  -10.50     -9.26
+    λ=5         8.91±0.22  278.85±7.05  -18.23    -18.33

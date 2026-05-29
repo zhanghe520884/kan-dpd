@@ -1,0 +1,22 @@
+{
+  "_comment": "OpenDPD 公开测量数据下载源。 每个数据集 = 6 个 CSV + 1 个 spec.json。",
+  "_repo": "https://github.com/lab-emi/OpenDPD",
+  "_branch": "main",
+  "base_url": "https://raw.githubusercontent.com/lab-emi/OpenDPD/main/datasets",
+  "files_per_dataset": [
+    "spec.json",
+    "train_input.csv", "train_output.csv",
+    "val_input.csv",   "val_output.csv",
+    "test_input.csv",  "test_output.csv"
+  ],
+  "datasets": [
+    {"name": "DPA_200MHz"},
+    {"name": "DPA_160MHz"},
+    {"name": "APA_200MHz"}
+  ],
+  "_notes": [
+    "下载后会自动把 6 个 CSV 拼成 1 个 <name>.npz,字段 = x, y, train_end, val_end",
+    "DPA_200MHz 通常 ~50-80 MB,网络慢时可能需要几分钟",
+    "失败时实验五会自动回退到合成代理 PA"
+  ]
+}
