@@ -18,38 +18,6 @@ ILA-DPD                  (e2, 全指标 NMSE / EVM / ACPR)
 
 ---
 
-## 主要结果摘要
-
-### PA 前向建模 NMSE (dB),5 seeds 均值
-
-| Model | Saleh | Rapp | GMP-PA |
-|---|---:|---:|---:|
-| MP | **-81.8** | **-128.5** | -50.5 |
-| GMP | -64.5 | -109.1 | **-101.1** |
-| MLP | -32.5 | -48.1 | -38.7 |
-| CNN | -26.2 | -35.6 | -23.8 |
-| GRU | -28.7 | -52.2 | -35.0 |
-| **KAN** | -44.1 | -51.2 | -44.9 |
-| GMP+KAN | -63.6 | -67.8 | -76.1 |
-
-→ **KAN 在所有 PA 上均优于其他 NN 基线**;经典 MP/GMP 在自身参数化下不可击败。
-
-### 仿真→实测迁移 (双数据集对照, 3 seeds)
-
-| 策略 | DPA_200MHz<br>(38k 样本) | DPA_160MHz<br>(480k 样本) |
-|---|---:|---:|
-| A. 仅用实测从零训练 | +16.4 ± 2.8 | +5.9 ± 6.4 |
-| B. Zero-shot 迁移 | **+1.7** | **+1.7** |
-| C. Few-shot 5% 微调 | -4.8 | **-17.5** |
-| C. Few-shot 20% 微调 | -8.8 | **-30.7** |
-
-→ **关键发现**:
-1. 仿真预训练给 zero-shot NMSE 带来 6–14 dB 提升,**两个数据集上 zero-shot 性能完全一致**(+1.7 dB),说明预训练学到的是 PA 非线性的"通用形态"
-2. **Few-shot 微调强烈依赖实测数据规模**: DPA_160MHz(12 倍数据量)的 20% 微调能到 -30.7 dB,远胜 DPA_200MHz 的 -8.8 dB
-3. **从零训练失败的程度也与数据量相关**,小数据时(+16.4 dB) 远比大数据时(+5.9 dB) 糟糕
-
----
-
 ## 目录
 
 1. [实验设计目标](#1-实验设计目标)
@@ -62,7 +30,7 @@ ILA-DPD                  (e2, 全指标 NMSE / EVM / ACPR)
 8. [已实现的模型 / 指标 / 消融清单](#8-已实现的模型--指标--消融清单)
 9. [创新点 — 频域感知 KAN-DPD 损失](#9-创新点--频域感知-kan-dpd-损失)
 10. [仿真→实测迁移](#10-仿真实测迁移)
-11. [Nature 风格 hero 图集](#11-nature-风格-hero-图集)
+11. [hero 图集](#11-hero-图集)
 12. [主要超参数](#12-主要超参数)
 13. [常见问题](#13-常见问题)
 14. [代码改写 / 二次开发](#14-代码改写--二次开发)
@@ -71,23 +39,23 @@ ILA-DPD                  (e2, 全指标 NMSE / EVM / ACPR)
 
 ## 1. 实验设计目标
 
-| 实验目标 | 本仓库实现 |
-|---|---|
-| ① 生成复基带 PA 输入信号 | `signal_gen.gen_ofdm_like` (OFDM-like, PAPR ≈ 8 dB) |
-| ② 训练/验证/测试切分 | `data.split_indices` 顺序 7:1.5:1.5;实测数据用 OpenDPD 官方分割 |
-| ③ 前向 PA 建模 NMSE 比较 | `experiments/e1_pa_forward.py` |
-| ④ 固定最佳 PA → DPD 训练 | `experiments/e2_dpd_ila.py` (ILA 间接学习架构) |
-| ⑤ 输出 NMSE / EVM / ACPR | `metrics.py` 全套 |
-| ⑥ 消融 + 复杂度 + 显著性 | `experiments/e3_ablation.py` + `stats.py` |
-| 三类仿真 PA 数据源 | `pa_models.py`: Saleh / Rapp / GMP-with-memory |
-| 基线模型: GMP+MLP+CNN+GRU+KAN+Hybrid | `models/` 6 个模型 |
-| KAN 增强输入特征 | `data.make_features`: [I,Q,…,\|x\|,\|x\|³,sinθ,cosθ] |
-| GMP K∈{5,7,9} × Q∈{3,5,7} 扫描 | `e3.sweep_gmp` |
-| 5 类消融实验 | `e3.{grid,tap,feature,hybrid,quant}` |
-| ≥5 个随机种子 + 配对检验 + Holm 校正 | `stats.py`,`config.SEEDS` 长度 5 |
-| 图: PSD/AM-AM/AM-PM/星座/收敛 | `plotting.py` + `scripts/make_figures.py` |
-| **[创新点]** 频域感知 KAN-DPD 损失 | `losses.py` + `experiments/e4_freq_loss.py` |
-| 仿真→实测迁移 | `experiments/e5_sim_to_meas.py` + 自动下载 OpenDPD |
+| 实验目标                             | 本仓库实现                                                   |
+| ------------------------------------ | ------------------------------------------------------------ |
+| ① 生成复基带 PA 输入信号             | `signal_gen.gen_ofdm_like` (OFDM-like, PAPR ≈ 8 dB)          |
+| ② 训练/验证/测试切分                 | `data.split_indices` 顺序 7:1.5:1.5;实测数据用 OpenDPD 官方分割 |
+| ③ 前向 PA 建模 NMSE 比较             | `experiments/e1_pa_forward.py`                               |
+| ④ 固定最佳 PA → DPD 训练             | `experiments/e2_dpd_ila.py` (ILA 间接学习架构)               |
+| ⑤ 输出 NMSE / EVM / ACPR             | `metrics.py` 全套                                            |
+| ⑥ 消融 + 复杂度 + 显著性             | `experiments/e3_ablation.py` + `stats.py`                    |
+| 三类仿真 PA 数据源                   | `pa_models.py`: Saleh / Rapp / GMP-with-memory               |
+| 基线模型: GMP+MLP+CNN+GRU+KAN+Hybrid | `models/` 6 个模型                                           |
+| KAN 增强输入特征                     | `data.make_features`: [I,Q,…,\|x\|,\|x\|³,sinθ,cosθ]         |
+| GMP K∈{5,7,9} × Q∈{3,5,7} 扫描       | `e3.sweep_gmp`                                               |
+| 5 类消融实验                         | `e3.{grid,tap,feature,hybrid,quant}`                         |
+| ≥5 个随机种子 + 配对检验 + Holm 校正 | `stats.py`,`config.SEEDS` 长度 5                             |
+| 图: PSD/AM-AM/AM-PM/星座/收敛        | `plotting.py` + `scripts/make_figures.py`                    |
+| **[创新点]** 频域感知 KAN-DPD 损失   | `losses.py` + `experiments/e4_freq_loss.py`                  |
+| 仿真→实测迁移                        | `experiments/e5_sim_to_meas.py` + 自动下载 OpenDPD           |
 
 ---
 
@@ -95,26 +63,26 @@ ILA-DPD                  (e2, 全指标 NMSE / EVM / ACPR)
 
 ### 2.1 系统与硬件要求
 
-| 项 | 推荐 / 实测 |
-|---|---|
-| Python | 3.10 / 3.11 / 3.12 (开发与回归测试用 3.12.4) |
-| 操作系统 | Windows 10 / 11、Ubuntu 22.04+、macOS 12+ |
-| CPU/GPU | **CPU 即可**;有 GPU 自动启用 |
-| 内存 | ≥ 4 GB |
-| 磁盘 | ≥ 1 GB(代码 + ckpt + 结果);若启用自动下载 OpenDPD 再加 ~10 MB |
-| 网络 | 仅 e5 首次自动下载需要(可选,无网则用合成代理) |
+| 项       | 推荐 / 实测                                                  |
+| -------- | ------------------------------------------------------------ |
+| Python   | 3.10 / 3.11 / 3.12 (开发与回归测试用 3.12.4)                 |
+| 操作系统 | Windows 10 / 11、Ubuntu 22.04+、macOS 12+                    |
+| CPU/GPU  | **CPU 即可**;有 GPU 自动启用                                 |
+| 内存     | ≥ 4 GB                                                       |
+| 磁盘     | ≥ 1 GB(代码 + ckpt + 结果);若启用自动下载 OpenDPD 再加 ~10 MB |
+| 网络     | 仅 e5 首次自动下载需要(可选,无网则用合成代理)                |
 
 
 ### 2.2 第三方依赖
 
 仅 4 个,无任何"重型"或私有依赖:
 
-| 库 | 用途 | 最低版本 | 实测版本 |
-|---|---|---|---|
-| `numpy` | 数值计算 / FFT / LS | 1.24 | 1.26.4 |
-| `scipy` | 显著性检验(`scipy.stats`) | 1.10 | 1.13.1 |
-| `matplotlib` | 出图(PNG/PDF/SVG/TIFF) | 3.6 | 3.8.4 |
-| `torch` | 神经网络(KAN/MLP/CNN/GRU) | 2.2 | 2.4.1 |
+| 库           | 用途                      | 最低版本 | 实测版本 |
+| ------------ | ------------------------- | -------- | -------- |
+| `numpy`      | 数值计算 / FFT / LS       | 1.24     | 1.26.4   |
+| `scipy`      | 显著性检验(`scipy.stats`) | 1.10     | 1.13.1   |
+| `matplotlib` | 出图(PNG/PDF/SVG/TIFF)    | 3.6      | 3.8.4    |
+| `torch`      | 神经网络(KAN/MLP/CNN/GRU) | 2.2      | 2.4.1    |
 
 > 标准库已涵盖:`argparse`, `copy`, `csv`, `io`, `json`, `math`,`os`, `sys`, `urllib`(自动下载用),`importlib`。 **不依赖** pandas /sklearn / pykan / sympy / h5py / yaml / tqdm 等任何额外库。
 
@@ -139,6 +107,31 @@ pip install -r requirements.txt
 # 方式 C: pip 直接装(若不介意污染全局)
 pip install numpy>=1.24 scipy>=1.10 matplotlib>=3.6 torch>=2.2
 ```
+
+#### 国内网络:使用镜像源加速
+
+国内直接访问 PyPI 较慢,可加 `-i` 指定镜像源:
+
+```bash
+pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+```
+
+若某个镜像返回 `HTTP error 403 Forbidden`(镜像临时限流或 CDN 故障,
+与本项目无关),换另一个镜像重试即可:
+
+```bash
+# 阿里云
+pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+# 中科大
+pip install -r requirements.txt -i https://pypi.mirrors.ustc.edu.cn/simple/
+# 清华(出现 403 时先升级 pip 再试: python -m pip install --upgrade pip)
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+# 官方源
+pip install -r requirements.txt -i https://pypi.org/simple/
+```
+
+仍失败时,可先 `pip cache purge` 清缓存,或 `python -m pip install --upgrade pip`
+升级后重试。
 
 #### Windows 上 PyTorch DLL 错误的处理
 
@@ -358,9 +351,13 @@ python scripts/download_data.py DPA_200MHz DPA_160MHz
 ### 6.3 数据来源
 
 - 仓库: https://github.com/lab-emi/OpenDPD
+
 - 路径: `datasets/{DPA_200MHz, DPA_160MHz, APA_200MHz}/`
+
 - 每个数据集 = 6 CSV(train/val/test 的 input/output)+ 1 spec.json
+
 - 本仓库自动拼成 `<name>.npz`,字段:
+
   ```
   x:         complex64[N]   完整复基带输入
   y:         complex64[N]   PA 输出
@@ -376,11 +373,11 @@ python run_all.py --stage e5 --offline
 
 ### 6.5 数据规模
 
-| 数据集 | 总样本 | 文件大小 |
-|---|---:|---:|
-| DPA_200MHz | 38 400 | 600 KB |
-| DPA_160MHz | 480 000 | 7.6 MB |
-| APA_200MHz | 96 000 | 1.6 MB |
+| 数据集     |  总样本 | 文件大小 |
+| ---------- | ------: | -------: |
+| DPA_200MHz |  38 400 |   600 KB |
+| DPA_160MHz | 480 000 |   7.6 MB |
+| APA_200MHz |  96 000 |   1.6 MB |
 
 ### 6.6 数据格式自定义
 
@@ -401,14 +398,14 @@ python run_all.py --stage e5 --offline
 
 **A. hero 图集** (`results/figures/F1..F6`,每张 SVG+PDF+TIFF+PNG):
 
-| Figure | 内容 | 布局 |
-|---|---|---|
-| F1 | 3 PA 的 AM/AM 真值散点 | 双栏 1×3 |
-| F2 | 前向建模 NMSE + 参数效率 | 双栏 1×2 |
-| F3 | DPD 全指标(PSD/EVM/NMSE/ACPR) | 双栏 2×2 |
-| F4 | 5 类消融 + GMP K/Q 热力图 | 双栏 2×3 |
-| F5 | **创新点:频域损失 NMSE↔ACPR Pareto** | 单栏 2×1 |
-| F6 | **仿真→实测迁移 NMSE / ACPR (2 数据集对照)** | 双栏 2×2 |
+| Figure | 内容                                         | 布局     |
+| ------ | -------------------------------------------- | -------- |
+| F1     | 3 PA 的 AM/AM 真值散点                       | 双栏 1×3 |
+| F2     | 前向建模 NMSE + 参数效率                     | 双栏 1×2 |
+| F3     | DPD 全指标(PSD/EVM/NMSE/ACPR)                | 双栏 2×2 |
+| F4     | 5 类消融 + GMP K/Q 热力图                    | 双栏 2×3 |
+| F5     | **创新点:频域损失 NMSE↔ACPR Pareto**         | 单栏 2×1 |
+| F6     | **仿真→实测迁移 NMSE / ACPR (2 数据集对照)** | 双栏 2×2 |
 
 字体 Arial 7pt,可编辑(svg.fonttype=none + pdf.fonttype=42),
 TIFF 600 dpi。
@@ -438,11 +435,13 @@ coeffs = np.load('checkpoints/saleh/dpd_ila/GMP_seed2026.npz')['coeffs']
 ## 8. 已实现的模型 / 指标 / 消融清单
 
 ### 8.1 PA 仿真(`pa_models.py`)
+
 - **Saleh** [Saleh 1981]: 无记忆 AM/AM + AM/PM (TWT-like)
 - **Rapp** [Rapp 1991]: 无记忆软限幅 (SSPA-like)
 - **GMP-PA**: 固定复数系数 GMP,带交叉项,小信号增益归一化为 1
 
 ### 8.2 模型(`models/`)
+
 - **MP** [Ding 2004]: 7 阶 × 4 抽头,LS 闭解
 - **GMP** [Morgan 2006]: 5 阶 × 3 抽头 × 2 lag/lead
 - **MLP / RVTDNN** [Liu 2004]: 2 层 tanh
@@ -452,12 +451,14 @@ coeffs = np.load('checkpoints/saleh/dpd_ila/GMP_seed2026.npz')['coeffs']
 - **GMP + KAN residual**
 
 ### 8.3 指标(`metrics.py`)
+
 - **NMSE** (dB)
 - **EVM** (%)
 - **ACPR** lower / upper (dB), Welch-PSD based
 - **PSD** for plotting
 
 ### 8.4 消融(`e3_ablation.py`)
+
 - A 样条网格 grid ∈ {5,7,9}
 - B 时延抽头 tap ∈ {3,5,7,9}
 - C 输入特征 (IQ / +env / +env+phase)
@@ -466,6 +467,7 @@ coeffs = np.load('checkpoints/saleh/dpd_ila/GMP_seed2026.npz')['coeffs']
 - F GMP K∈{5,7,9} × Q∈{3,5,7} 扫描
 
 ### 8.5 统计(`stats.py`)
+
 - 均值 ± std (ddof=1)
 - 自适应配对检验(n≥8 且 Shapiro 正态 → 配对 t,否则 Wilcoxon)
 - Holm-Bonferroni 控制 family-wise error rate, α = 0.05
@@ -495,18 +497,19 @@ L_freq = E_b[ Σ_{f ∈ adj-channel}  |FFT(e_b · Hann)[f]|²
 ```
 
 实现要点:
+
 - 训练时切换为**顺序采样**(`DataLoader(shuffle=False)`),保证 FFT 时序连贯
 - Hann 加窗降低频谱泄漏
 - 用"邻信道 / 主信道"功率比代替绝对功率,数量级稳定
 
 ### 9.3 结果(`results/gmp_pa/e4_freq_loss.json`)
 
-| λ | NMSE (dB) | EVM (%) | ACPR_L (dB) |
-|---:|---:|---:|---:|
-| 0 | -8.4 ± 5.2 | 43 ± 27 | -5.7 |
-| 0.1 | -5.2 ± 0.1 | 55 ± 0.7 | -1.8 |
-| 1.0 | +2.5 ± 4.7 | 147 ± 87 | -10.5 |
-| 5.0 | +8.9 ± 0.2 | 279 ± 7 | **-18.2** |
+|    λ |  NMSE (dB) |  EVM (%) | ACPR_L (dB) |
+| ---: | ---------: | -------: | ----------: |
+|    0 | -8.4 ± 5.2 |  43 ± 27 |        -5.7 |
+|  0.1 | -5.2 ± 0.1 | 55 ± 0.7 |        -1.8 |
+|  1.0 | +2.5 ± 4.7 | 147 ± 87 |       -10.5 |
+|  5.0 | +8.9 ± 0.2 |  279 ± 7 |   **-18.2** |
 
 → **教科书般的频谱整形权衡**:λ 从 0 升到 5,ACPR 改善 13 dB,代价是 NMSE 劣化。
 为下游通信系统提供了"通信质量 vs 频谱合规"调节旋钮。 详情见 F5。
@@ -517,12 +520,12 @@ L_freq = E_b[ Σ_{f ∈ adj-channel}  |FFT(e_b · Hann)[f]|²
 
 ### 10.1 实验三策略
 
-| 策略 | 训练数据 | 用途 |
-|---|---|---|
-| A. From-scratch | 100% 实测训练集 | 上限对照,验证从零训难度 |
-| B. Zero-shot | gmp_pa 仿真 ckpt 直接迁移 | 看预训练的可迁移性 |
-| C. Few-shot 5% | 仿真 ckpt + 5% 实测微调 | 实用场景 |
-| C. Few-shot 20% | 仿真 ckpt + 20% 实测微调 | 实用场景 |
+| 策略            | 训练数据                  | 用途                    |
+| --------------- | ------------------------- | ----------------------- |
+| A. From-scratch | 100% 实测训练集           | 上限对照,验证从零训难度 |
+| B. Zero-shot    | gmp_pa 仿真 ckpt 直接迁移 | 看预训练的可迁移性      |
+| C. Few-shot 5%  | 仿真 ckpt + 5% 实测微调   | 实用场景                |
+| C. Few-shot 20% | 仿真 ckpt + 20% 实测微调  | 实用场景                |
 
 ### 10.2 评测方法
 
@@ -533,23 +536,24 @@ L_freq = E_b[ Σ_{f ∈ adj-channel}  |FFT(e_b · Hann)[f]|²
 
 **DPA_200MHz** (38 400 样本, 容量受限)
 
-| 策略 | NMSE (dB) | EVM (%) | ACPR_L (dB) |
-|---|---:|---:|---:|
-| A. 从零训练 | +16.4 ± 2.8 | 683% | -3.3 |
-| B. Zero-shot | +1.7 ± 0.0 | 122% | -7.9 |
-| C. Few-shot 5% | -4.8 ± 0.06 | 58% | **-8.1** |
-| C. Few-shot 20% | **-8.8 ± 0.20** | **36%** | -7.2 |
+| 策略            |       NMSE (dB) | EVM (%) | ACPR_L (dB) |
+| --------------- | --------------: | ------: | ----------: |
+| A. 从零训练     |     +16.4 ± 2.8 |    683% |        -3.3 |
+| B. Zero-shot    |      +1.7 ± 0.0 |    122% |        -7.9 |
+| C. Few-shot 5%  |     -4.8 ± 0.06 |     58% |    **-8.1** |
+| C. Few-shot 20% | **-8.8 ± 0.20** | **36%** |        -7.2 |
 
 **DPA_160MHz** (480 000 样本, 数据丰富)
 
-| 策略 | NMSE (dB) | EVM (%) | ACPR_L (dB) |
-|---|---:|---:|---:|
-| A. 从零训练 | +5.9 ± 6.4 | 231% | +0.8 |
-| B. Zero-shot | +1.7 ± 0.0 | 122% | -8.2 |
-| C. Few-shot 5% | -17.5 ± 1.4 | 13% | -7.6 |
-| C. Few-shot 20% | **-30.7 ± 0.9** | **2.9%** | **-8.7** |
+| 策略            |       NMSE (dB) |  EVM (%) | ACPR_L (dB) |
+| --------------- | --------------: | -------: | ----------: |
+| A. 从零训练     |      +5.9 ± 6.4 |     231% |        +0.8 |
+| B. Zero-shot    |      +1.7 ± 0.0 |     122% |        -8.2 |
+| C. Few-shot 5%  |     -17.5 ± 1.4 |      13% |        -7.6 |
+| C. Few-shot 20% | **-30.7 ± 0.9** | **2.9%** |    **-8.7** |
 
 **跨数据集关键发现**:
+
 1. **仿真预训练对真实数据贡献巨大**:zero-shot 比从零训练好 6–14 dB
 2. **Zero-shot 性能在两个数据集上完全一致**(+1.7 dB),验证了仿真预训练
    学到的是 PA 非线性的"通用形态",与目标 PA 的具体型号无关
@@ -629,24 +633,29 @@ ALPHA = 0.05
 ## 13. 常见问题
 
 ### Q1: 第一次跑实验很慢?
+
 是。 默认 5 seeds × 多 PA × 多模型,约 90 分钟。 第二次跑会加载 ckpt 跳过训练,
 通常 1–2 分钟即可刷新所有图。
 
 ### Q2: KAN 为什么不用官方 pykan?
+
 pykan 面向小规模科学拟合,批训练慢一两个数量级。 本仓库的实现等价于
 "efficient-KAN"(数学形式与原论文 Eq. 2.10 完全相同),只依赖 `torch`。
 近期 PA/DPD 领域的 KAN 应用工作(如 RVTD-KAN、LEANN)也都自写 PyTorch
 实现而非 pykan。
 
 ### Q3: 我可以减少 seeds 时间吗?
+
 可以,改 `config.SEEDS` 列表。 但显著性检验通常要求 ≥5 个种子,投稿/答辩按 5 走最稳。
 
 ### Q4: 怎么加新模型?
+
 1. 在 `models/` 新建文件,继承 `nn.Module`,`forward(x: [B, in_dim]) -> [B, 2]`
 2. 在 `experiments/common.make_nn_model` 加 elif 分支
 3. 在 `e1/e2` 的 `NN_MODELS` / `DPD_MODELS` 列表加上名字
 
 ### Q5: OpenDPD 自动下载失败怎么办?
+
 1. 看 `logs/run_e5_real.log` 的报错信息
 2. 检查网络/防火墙
 3. 手动从 https://github.com/lab-emi/OpenDPD 下载 `datasets/DPA_200MHz/` 下 6 个 CSV
@@ -654,29 +663,47 @@ pykan 面向小规模科学拟合,批训练慢一两个数量级。 本仓库的
 5. 或直接用 `--offline` 跑合成代理
 
 ### Q6: 已下载的数据想强制重下?
+
 ```bash
 rm data/measured/DPA_200MHz.npz
 python scripts/download_data.py DPA_200MHz
 ```
 
 ### Q7: Wilcoxon p=0.0625 是不是不显著?
+
 是。 n=5 时 Wilcoxon signed-rank 的最小可能 p = 0.0625 (W=0)。 这是检验方法
 的下限,不是模型差异不显著。 解决:把 `config.SEEDS` 调到 ≥8 会启动配对 t 分支。
 
 ### Q8: 中文字符在图里显示成方框?
+
 图里我用的是 Arial 英文标签。 想用中文,改 `scripts/make_figures.py` 的
 `mpl.rcParams['font.sans-serif']` 为 `['SimHei', 'Microsoft YaHei']` 即可。
+
+### Q9: pip 安装报 `HTTP error 403 Forbidden`?
+
+这是镜像源临时限流或 CDN 故障,与本项目无关。 换一个镜像源重试即可
+(见 2.3 节"国内网络:使用镜像源加速"):
+
+```bash
+pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+```
+
+仍失败可 `pip cache purge` 清缓存,或 `python -m pip install --upgrade pip`
+升级后重试。
 
 ---
 
 ## 14. 代码改写 / 二次开发
 
 ### 14.1 增加 PA 类型
+
 在 `pa_models.py` 加函数,注册到 `PA_REGISTRY`,再在
 `experiments/common.prepare_signal` 的 `target_rms` 字典加一项。
 
 ### 14.2 接入自己的测量数据
+
 把 .npz 放到 `data/measured/`,字段:
+
 ```python
 np.savez('mydata.npz',
          x=x_complex64,
@@ -684,13 +711,16 @@ np.savez('mydata.npz',
          train_end=np.int64(n_train),     # 可选
          val_end=np.int64(n_train + n_val))  # 可选
 ```
+
 e5 会自动检测并使用。
 
 ### 14.3 改用 GPU
+
 设置 `CUDA_VISIBLE_DEVICES`,代码会自动用 cuda。 默认 `config.DEVICE`
 会探测 `torch.cuda.is_available()`。
 
 ### 14.4 改频域损失到其他模型
+
 `trainer.train_model(..., freq_lambda=1.0, freq_block_size=256)` 对所有 NN
 都适用。 e4 只对 KAN 做了对照,但可以替换为 MLP/GRU/etc.
 
