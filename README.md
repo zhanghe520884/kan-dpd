@@ -207,8 +207,8 @@ kan_code/
 ├── plotting.py                   # 单图绘制(原始版,28 张/PA)
 │
 ├── models/                       # 待比较的所有模型
-│   ├── mp_gmp.py                 # MP / GMP, LS 闭解
-│   ├── nn_baselines.py           # RVTDNN-MLP / GRU
+│   ├── mp_gmp.py                 # MP / GMP:两个model, LS 闭解
+│   ├── nn_baselines.py           # RVTDNN-MLP / GRU:两个model
 │   ├── cnn.py                    # 1D-CNN (De Silva 2022)
 │   ├── kan.py                    # 高效 B-spline KAN
 │   └── hybrid.py                 # GMP + KAN 残差
