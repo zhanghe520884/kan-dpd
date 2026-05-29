@@ -104,7 +104,6 @@ ILA-DPD                  (e2, 全指标 NMSE / EVM / ACPR)
 | 磁盘 | ≥ 1 GB(代码 + ckpt + 结果);若启用自动下载 OpenDPD 再加 ~10 MB |
 | 网络 | 仅 e5 首次自动下载需要(可选,无网则用合成代理) |
 
-完整 e1+e2+e3+e4+e5 在普通笔记本 CPU 上约 **90 分钟**完成(5 seeds)。
 
 ### 2.2 第三方依赖
 
@@ -230,7 +229,7 @@ kan_code/
 │   └── e5_sim_to_meas.py         # 仿真→实测迁移 (OpenDPD)
 │
 ├── scripts/                      # 辅助脚本
-│   ├── make_figures.py           # Nature 风格 6 张 hero 图
+│   ├── make_figures.py           # 6 张 hero 图
 │   ├── summary_table.py          # 横向汇总表(SUMMARY.md/csv)
 │   ├── download_data.py          # 自动下载 OpenDPD 数据
 │   └── convert_opendpd.py        # .mat → .npz 单文件转换
@@ -277,7 +276,6 @@ python run_all.py
 4. e4: 创新点 — λ ∈ {0, 0.1, 1, 5} 频域损失对照(gmp_pa, 3 seeds)
 5. e5: **自动下载 OpenDPD** 数据 → 在 DPA_200MHz / DPA_160MHz 上做仿真→实测迁移
 
-总耗时 (普通笔记本 CPU, torch CPU 版): **约 90 分钟**
 
 后续运行会**自动跳过已训完的模型**(ckpt 命中),典型 1–2 分钟刷新图表。
 
